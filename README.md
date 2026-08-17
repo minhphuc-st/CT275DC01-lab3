@@ -2,13 +2,11 @@
 
 Học kỳ 3, Năm học: 2025-2026
 
-**Họ tên**: ...
+**Họ tên**: Thạch Minh Phúc
 
-**MSSV**: ...
+**MSSV**: DC21V7N612
 
-**Lớp HP**: ...
-
-
+**Lớp HP**: CT275DC01
 
 ## Triển khai trên nginx
 
@@ -19,7 +17,7 @@ server {
     listen       80;
     server_name  ct275-lab3.localhost;
 
-    root "D:/mysites/lab3/public";
+    root "D:\mysites\CT275DC01-lab3\CT275DC01-lab3\public";
     index index.php;
 
     charset utf-8;

@@ -9,11 +9,11 @@ class Contact
   private ?PDO $db;
 
   public int $id = -1;
-  public $name;
-  public $phone;
-  public $notes;
-  public $created_at;
-  public $updated_at;
+  public ?string $name = null;
+  public ?string $phone = null;
+  public ?string $notes = null;
+  public ?string $created_at = null;
+  public ?string $updated_at = null;
 
   public function __construct(?PDO $pdo)
   {
@@ -52,4 +52,56 @@ class Contact
 
     return $errors;
   }
+
+  public function all(): array
+{
+    $contacts = [];
+
+    $statement = $this->db->prepare('select * from contacts');
+    $statement->execute();
+    while ($row = $statement->fetch()) {
+        $contact = new Contact($this->db);
+        $contact->fillFromDbRow($row);
+        $contacts[] = $contact;
+    }
+
+    return $contacts;
+}
+
+protected function fillFromDbRow(array $row): Contact
+{
+    $this->id = $row['id'];
+    $this->name = $row['name'];
+    $this->phone = $row['phone'];
+    $this->notes = $row['notes'];
+    $this->created_at = $row['created_at'];
+    $this->updated_at = $row['updated_at'];
+
+    return $this;
+}
+
+  public function count(): int{
+        $statement = $this->db->prepare('select count(*) from contacts');
+        $statement->execute();
+        return $statement->fetchColumn();
+    }
+
+  public function paginate(int $offset = 0, int $limit = 10): array{
+        $contacts = [];
+
+        $statement = $this->db->prepare('select * from contacts limit :limit offset :offset');
+        $statement->bindValue(':offset', $offset, \PDO::PARAM_INT);
+        $statement->bindValue(':limit', $limit, \PDO::PARAM_INT);
+        $statement->execute();
+
+        while ($row = $statement->fetch()) {
+            $contact = new Contact($this->db);
+            $contact->fillFromDbRow($row);
+            $contacts[] = $contact;
+        }
+
+        return $contacts;
+  }
+
+
 }
