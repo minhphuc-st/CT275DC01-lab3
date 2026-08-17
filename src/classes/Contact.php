@@ -137,7 +137,7 @@ protected function fillFromDbRow(array $row): Contact
   }
 
   public function find(int $id): ?Contact
-    {
+  {
         $statement = $this->db->prepare('select * from contacts where id = :id');
         $statement->execute(['id' => $id]);
 
@@ -147,7 +147,14 @@ protected function fillFromDbRow(array $row): Contact
         }
 
         return null;
+  }
+
+  public function delete(): bool
+    {
+        $statement = $this->db->prepare('delete from contacts where id = :id');
+        return $statement->execute(['id' => $this->id]);
     }
+
 
 
 }
