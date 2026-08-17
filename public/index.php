@@ -7,8 +7,8 @@ use CT275\Labs\Paginator;
 $contact = new Contact($PDO);
 
 // Xử lý lấy số trang và số dòng từ URL
-$limit = (isset($_GET['limit']) && is_numeric($_GET['limit'])) ? (int)$_GET['limit'] : 1;
-$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? (int)$_GET['page'] : 2;
+$limit = (isset($_GET['limit']) && is_numeric($_GET['limit'])) ? (int)$_GET['limit'] : 5;
+$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? (int)$_GET['page'] : 1;
 
 // Khởi tạo đối tượng Paginator
 $paginator = new Paginator(
