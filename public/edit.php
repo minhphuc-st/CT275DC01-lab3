@@ -4,7 +4,29 @@ require_once __DIR__ . '/../src/classes/Contact.php';
 
 use CT275\Labs\Contact;
 
-$contact = new Contact(null);
+$contact = new Contact($PDO);
+
+$id = isset($_REQUEST['id']) ?
+    filter_var($_REQUEST['id'], FILTER_VALIDATE_INT) : false;
+
+if (!$id || !($contact->find($id))) {
+    redirect('/');
+}
+
+$errors = [];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $contactData = [
+        'name' => $_POST['name'] ?? '',
+        'phone' => $_POST['phone'] ?? '',
+        'notes' => $_POST['notes'] ?? '',
+    ];
+
+    $errors = $contact->validate($contactData);
+    if (empty($errors)) {
+        $contact->fill($contactData);
+        $contact->save() && redirect('/');
+    }
+}
 
 include_once __DIR__ . '/../src/partials/header.php';
 ?>
@@ -23,7 +45,7 @@ include_once __DIR__ . '/../src/partials/header.php';
     <div class="row">
       <div class="col-12">
 
-        <form method="post" class="col-md-6 offset-md-3">
+        <form action="/edit.php?id=<?= $id ?>" method="post" class="col-md-6 offset-md-3">
 
           <input type="hidden" name="id" value="<?= $contact->id ?>">
 
